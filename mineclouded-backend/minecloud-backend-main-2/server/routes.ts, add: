@@ -1,0 +1,18 @@
+import { Express } from "express";
+import { startMinecraftServer } from "./serverProvisioner";
+
+export function registerRoutes(app: Express) {
+  app.get("/", (req, res) => {
+    res.send("MineCloud AI Backend is Live!");
+  });
+
+  app.post("/api/servers/:id/start", async (req, res) => {
+    const serverId = parseInt(req.params.id);
+    try {
+      const result = await startMinecraftServer({ id: serverId });
+      res.json({ message: "Server started!", result });
+    } catch (err) {
+      res.status(500).json({ message: "Failed to start server", error: err });
+    }
+  });
+}
